@@ -19,7 +19,7 @@
   - Add unit tests for grid operations and spatial queries
   - _Requirements: 1.1, 1.2, 5.1, 5.4 (placement and construction validation)_
 
-- [ ] 4. Build entity-component-system foundation
+- [x] 4. Build entity-component-system foundation
   - Create base Entity and Component classes
   - Implement EntityManager for entity lifecycle management
   - Write component registration and query systems

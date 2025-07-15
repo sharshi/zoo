@@ -78,3 +78,22 @@ export interface Entity {
 export interface Component {
   type: string;
 }
+
+// Base component class for shared functionality
+export abstract class BaseComponent implements Component {
+  public abstract readonly type: string;
+  
+  constructor() {}
+  
+  /**
+   * Serialize component data for saving
+   */
+  serialize(): Record<string, any> {
+    return { type: this.type };
+  }
+  
+  /**
+   * Clone this component
+   */
+  abstract clone(): Component;
+}
