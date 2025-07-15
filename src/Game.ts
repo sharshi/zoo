@@ -106,7 +106,7 @@ export class Game {
     this.update(deltaTime);
     
     // Schedule next frame
-    requestAnimationFrame(() => this.gameLoop());
+    this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
   /**
@@ -140,5 +140,66 @@ export class Game {
    */
   togglePause(): void {
     this.gameState.isPaused = !this.gameState.isPaused;
+  }
+
+  /**
+   * Pause the game
+   */
+  pause(): void {
+    this.gameState.isPaused = true;
+  }
+
+  /**
+   * Resume the game
+   */
+  resume(): void {
+    this.gameState.isPaused = false;
+  }
+
+  /**
+   * Check if the game is paused
+   */
+  isPaused(): boolean {
+    return this.gameState.isPaused;
+  }
+
+  /**
+   * Set the time scale for the game
+   * @param scale - Time scale multiplier (1.0 = normal speed, 2.0 = double speed, 0.5 = half speed)
+   */
+  setTimeScale(scale: number): void {
+    if (scale < 0) {
+      throw new Error('Time scale cannot be negative');
+    }
+    this.gameState.timeScale = scale;
+    this.gameState.gameSettings.timeScale = scale;
+  }
+
+  /**
+   * Get the current time scale
+   */
+  getTimeScale(): number {
+    return this.gameState.timeScale;
+  }
+
+  /**
+   * Get the current game time in seconds
+   */
+  getCurrentTime(): number {
+    return this.gameState.currentTime;
+  }
+
+  /**
+   * Reset the game time to zero
+   */
+  resetTime(): void {
+    this.gameState.currentTime = 0;
+  }
+
+  /**
+   * Check if the game is currently running
+   */
+  getIsRunning(): boolean {
+    return this.isRunning;
   }
 }
