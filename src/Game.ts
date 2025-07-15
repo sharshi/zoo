@@ -1,6 +1,8 @@
 import { EntityManager } from './entities/EntityManager';
 import { GameState, WorldGrid, PlayerStats, GameSettings, TileData } from './utils/types';
 import { GAME_CONFIG, FINANCIAL_CONFIG } from './utils/constants';
+import { Renderer } from './rendering/Renderer';
+import { InputHandler } from './rendering/InputHandler';
 
 export class Game {
   private entityManager: EntityManager;
@@ -8,6 +10,8 @@ export class Game {
   private lastUpdateTime: number;
   private isRunning: boolean;
   private animationFrameId: number | null;
+  private renderer: Renderer | null;
+  private inputHandler: InputHandler | null;
 
   constructor() {
     this.entityManager = new EntityManager();
@@ -15,6 +19,8 @@ export class Game {
     this.lastUpdateTime = 0;
     this.isRunning = false;
     this.animationFrameId = null;
+    this.renderer = null;
+    this.inputHandler = null;
   }
 
   /**
@@ -104,6 +110,7 @@ export class Game {
     this.lastUpdateTime = currentTime;
 
     this.update(deltaTime);
+    this.render();
     
     // Schedule next frame
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
@@ -118,7 +125,30 @@ export class Game {
     const scaledDeltaTime = deltaTime * this.gameState.timeScale;
     this.gameState.currentTime += scaledDeltaTime;
 
+    // Update input handler
+    if (this.inputHandler) {
+      this.inputHandler.update(deltaTime);
+    }
+
+    // Update renderer
+    if (this.renderer) {
+      this.renderer.update(deltaTime);
+    }
+
     // Systems will be updated here once implemented
+  }
+
+  /**
+   * Render the game
+   */
+  private render(): void {
+    if (!this.renderer) return;
+
+    // Render world grid
+    this.renderer.renderWorldGrid(this.gameState.worldGrid);
+
+    // Render all queued objects
+    this.renderer.render();
   }
 
   /**
@@ -201,5 +231,37 @@ export class Game {
    */
   getIsRunning(): boolean {
     return this.isRunning;
+  }
+
+  /**
+   * Initialize the rendering system with a canvas element
+   */
+  initializeRenderer(canvas: HTMLCanvasElement): void {
+    this.renderer = new Renderer(canvas);
+    this.inputHandler = new InputHandler(this.renderer.getCamera(), canvas);
+  }
+
+  /**
+   * Get the renderer instance
+   */
+  getRenderer(): Renderer | null {
+    return this.renderer;
+  }
+
+  /**
+   * Get the input handler instance
+   */
+  getInputHandler(): InputHandler | null {
+    return this.inputHandler;
+  }
+
+  /**
+   * Clean up resources
+   */
+  destroy(): void {
+    this.stop();
+    if (this.inputHandler) {
+      this.inputHandler.destroy();
+    }
   }
 }

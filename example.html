@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Tycoon 2D - Rendering Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #333;
+            background-color: #87CEEB;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px;
+        }
+        
+        .controls button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .info {
+            text-align: center;
+            margin: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Zoo Tycoon 2D - Rendering System Demo</h1>
+    
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <div class="controls">
+        <button id="startBtn">Start Game</button>
+        <button id="pauseBtn">Pause/Resume</button>
+        <button id="stopBtn">Stop Game</button>
+        <button id="zoomInBtn">Zoom In</button>
+        <button id="zoomOutBtn">Zoom Out</button>
+        <button id="resetCameraBtn">Reset Camera</button>
+    </div>
+    
+    <div class="info">
+        <p><strong>Controls:</strong></p>
+        <p>• Use WASD or Arrow Keys to pan the camera</p>
+        <p>• Use Mouse Wheel to zoom in/out</p>
+        <p>• Hold Middle Mouse Button or Right Mouse Button to drag the view</p>
+        <p>• Use +/- keys to zoom</p>
+        <p><strong>Current Status:</strong> <span id="status">Ready</span></p>
+        <p><strong>Camera Position:</strong> <span id="cameraPos">0, 0</span></p>
+        <p><strong>Zoom Level:</strong> <span id="zoomLevel">1.0</span></p>
+    </div>
+
+    <script type="module">
+        // This is a demo script showing how the rendering system would be used
+        // Note: In a real implementation, you would import from compiled JS files
+        
+        console.log('Zoo Tycoon 2D Rendering Demo');
+        console.log('This demo shows the structure of how the rendering system would be integrated.');
+        console.log('To see the actual rendering in action, you would need to:');
+        console.log('1. Compile the TypeScript code to JavaScript');
+        console.log('2. Import the Game class and other modules');
+        console.log('3. Initialize the game with the canvas element');
+        
+        // Example of how the integration would work:
+        /*
+        import { Game } from './dist/Game.js';
+        
+        const canvas = document.getElementById('gameCanvas');
+        const game = new Game();
+        
+        // Initialize the rendering system
+        game.initializeRenderer(canvas);
+        
+        // Get references to renderer and camera
+        const renderer = game.getRenderer();
+        const camera = renderer.getCamera();
+        
+        // Set up UI event handlers
+        document.getElementById('startBtn').addEventListener('click', () => {
+            game.start();
+            updateStatus('Running');
+        });
+        
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            game.togglePause();
+            updateStatus(game.isPaused() ? 'Paused' : 'Running');
+        });
+        
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            game.stop();
+            updateStatus('Stopped');
+        });
+        
+        document.getElementById('zoomInBtn').addEventListener('click', () => {
+            camera.zoomAt(1.2, canvas.width / 2, canvas.height / 2);
+        });
+        
+        document.getElementById('zoomOutBtn').addEventListener('click', () => {
+            camera.zoomAt(0.8, canvas.width / 2, canvas.height / 2);
+        });
+        
+        document.getElementById('resetCameraBtn').addEventListener('click', () => {
+            camera.setPosition(1600, 1600); // Center of world
+            camera.setZoom(1.0);
+        });
+        
+        // Update UI with camera info
+        function updateCameraInfo() {
+            const pos = camera.getPosition();
+            const zoom = camera.getZoom();
+            
+            document.getElementById('cameraPos').textContent = 
+                `${Math.round(pos.x)}, ${Math.round(pos.y)}`;
+            document.getElementById('zoomLevel').textContent = 
+                zoom.toFixed(2);
+        }
+        
+        function updateStatus(status) {
+            document.getElementById('status').textContent = status;
+        }
+        
+        // Update camera info periodically
+        setInterval(updateCameraInfo, 100);
+        */
+        
+        // For this demo, just show placeholder functionality
+        const statusEl = document.getElementById('status');
+        const cameraPosEl = document.getElementById('cameraPos');
+        const zoomLevelEl = document.getElementById('zoomLevel');
+        
+        let isRunning = false;
+        let isPaused = false;
+        let cameraX = 1600;
+        let cameraY = 1600;
+        let zoom = 1.0;
+        
+        function updateUI() {
+            cameraPosEl.textContent = `${Math.round(cameraX)}, ${Math.round(cameraY)}`;
+            zoomLevelEl.textContent = zoom.toFixed(2);
+        }
+        
+        document.getElementById('startBtn').addEventListener('click', () => {
+            isRunning = true;
+            isPaused = false;
+            statusEl.textContent = 'Running (Demo Mode)';
+        });
+        
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            if (isRunning) {
+                isPaused = !isPaused;
+                statusEl.textContent = isPaused ? 'Paused (Demo Mode)' : 'Running (Demo Mode)';
+            }
+        });
+        
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            isRunning = false;
+            isPaused = false;
+            statusEl.textContent = 'Stopped (Demo Mode)';
+        });
+        
+        document.getElementById('zoomInBtn').addEventListener('click', () => {
+            zoom = Math.min(3.0, zoom * 1.2);
+            updateUI();
+        });
+        
+        document.getElementById('zoomOutBtn').addEventListener('click', () => {
+            zoom = Math.max(0.25, zoom * 0.8);
+            updateUI();
+        });
+        
+        document.getElementById('resetCameraBtn').addEventListener('click', () => {
+            cameraX = 1600;
+            cameraY = 1600;
+            zoom = 1.0;
+            updateUI();
+        });
+        
+        // Simulate camera movement with arrow keys
+        document.addEventListener('keydown', (e) => {
+            const panSpeed = 50;
+            switch(e.code) {
+                case 'ArrowUp':
+                case 'KeyW':
+                    cameraY -= panSpeed;
+                    break;
+                case 'ArrowDown':
+                case 'KeyS':
+                    cameraY += panSpeed;
+                    break;
+                case 'ArrowLeft':
+                case 'KeyA':
+                    cameraX -= panSpeed;
+                    break;
+                case 'ArrowRight':
+                case 'KeyD':
+                    cameraX += panSpeed;
+                    break;
+                case 'Equal':
+                case 'NumpadAdd':
+                    zoom = Math.min(3.0, zoom * 1.1);
+                    break;
+                case 'Minus':
+                case 'NumpadSubtract':
+                    zoom = Math.max(0.25, zoom * 0.9);
+                    break;
+            }
+            updateUI();
+        });
+        
+        updateUI();
+    </script>
+</body>
+</html>

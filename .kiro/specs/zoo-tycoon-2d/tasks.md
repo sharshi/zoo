@@ -26,7 +26,7 @@
   - Add unit tests for ECS functionality
   - _Requirements: 1.3, 1.5, 3.1, 4.1 (managing animals, enclosures, and visitors)_
 
-- [ ] 5. Implement rendering system and camera controls
+- [x] 5. Implement rendering system and camera controls
   - Create Canvas-based rendering pipeline with layered drawing
   - Implement camera system with pan and zoom functionality
   - Add sprite loading and animation support
